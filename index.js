@@ -32,9 +32,8 @@ process.stdin.on('readable', function() {
         program
             .version('0.0.1')
             .option('-i, --image [image]', 'Image', 'image')
-            .option('-l, --limit [limit]', 'Parallel Limit', 'limit', 2)
+            .option('-l, --limit [limit]', 'Parallel Limit', 'limit')
             .parse(process.argv);
-
         var tasks = [];
         _.each(mp3s, function(mp3) {
             var m = path.parse(mp3);
@@ -51,12 +50,15 @@ console.log(c.green('running command'), c.black.bgWhite(cmd));
                         err: String(stde).split('\n'),
                     };
                     console.log(o);
+//fs.writeFileSync(__dirname+'/'+m.name+'.mp3-to-mkv.json', JSON.stringify(o));
+
+
                     cb(null, o);
 
                 });
             });
         });
-        async.mapLimit(tasks, program.limit, taskIterator, function(e, Results) {
+        async.mapLimit(tasks, parseInt(program.limit), taskIterator, function(e, Results) {
             if (e) throw e;
             console.log(Results);
         });
