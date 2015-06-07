@@ -21,13 +21,6 @@ var taskIterator = function(item, cb) {
             o: o,
         });
     });
-    /*
-        item(function(e, o) {
-            if (e) throw e;
-            cb(null, {
-                data: o,
-            });
-        });*/
 };
 
 process.stdin.on('readable', function() {
@@ -64,31 +57,12 @@ process.stdin.on('readable', function() {
                 });
             });
         });
-        //        console.log(pj.render(mp3s));
-        //       console.log(pj.render(tasks));
-        //        console.log(tasks);
-        //        async.parallelLimit(tasks, parallelLimit, function(e, Results) {
         async.mapLimit(tasks, parallelLimit, taskIterator, function(e, Results) {
             if (e) throw e;
             console.log(Results);
-            /*
-                        _.each(Results, function(r) {
-                            var BASE = r.base;
-                            fs.writeFileSync(__dirname + '/' + BASE + '.output', JSON.stringify(Results));
-                        });*/
-
         });
-
-
-
-        //    process.stdout.write('data: ' + chunk);
     }
 });
-
 process.stdin.on('end', function() {
     //    process.stdout.write('end');
-    //
-    //
-    //
-    //
 });
