@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 var _ = require('underscore'),
-
+c = require('chalk'),
     trim = require('trim'),
     child = require('child_process'),
     stripAnsi = require('strip-ansi'),
@@ -11,7 +11,6 @@ var _ = require('underscore'),
     pj = require('prettyjson'),
     program = require('commander');
 
-var parallelLimit = 5;
 
 var mp3s = [];
 var taskIterator = function(item, cb) {
@@ -33,7 +32,7 @@ process.stdin.on('readable', function() {
         program
             .version('0.0.1')
             .option('-i, --image [image]', 'Image', 'image')
-            .option('-l, --limit [limit]', 'Parallel Limit', 'limit')
+            .option('-l, --limit [limit]', 'Parallel Limit', 'limit', 2)
             .parse(process.argv);
 
         var tasks = [];
@@ -42,7 +41,7 @@ process.stdin.on('readable', function() {
             tasks.push(function(cb) {
                 var cmd = 'ls ' + m.name + '.mkv 2>/dev/null || ffmpeg -loop 1 -r ntsc -i ' + program.image + ' -i ' + mp3 + ' -c:a copy -c:v libx264 -preset fast -threads 0 -shortest ' + m.name + '.mkv';
                 var start = new Date().getTime();
-                var out = 'asads';
+console.log(c.green('running command'), c.black.bgWhite(cmd));
                 child.exec(cmd, function(e, stde, stdo) {
                     if (e) throw e;
                     var o = {
@@ -57,7 +56,7 @@ process.stdin.on('readable', function() {
                 });
             });
         });
-        async.mapLimit(tasks, parallelLimit, taskIterator, function(e, Results) {
+        async.mapLimit(tasks, program.limit, taskIterator, function(e, Results) {
             if (e) throw e;
             console.log(Results);
         });

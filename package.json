@@ -18,6 +18,7 @@
   "homepage": "https://github.com/binRick/processMp3s",
   "dependencies": {
     "async": "^1.2.0",
+    "chalk": "^1.0.0",
     "commander": "^2.8.1",
     "prettyjson": "^1.1.2",
     "strip-ansi": "^2.0.1",
