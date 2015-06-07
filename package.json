@@ -21,6 +21,7 @@
     "commander": "^2.8.1",
     "prettyjson": "^1.1.2",
     "strip-ansi": "^2.0.1",
+    "trim": "0.0.1",
     "underscore": "^1.8.3"
   }
 }

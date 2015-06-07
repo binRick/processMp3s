@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 var _ = require('underscore'),
+    trim = require('trim'),
     child = require('child_process'),
     stripAnsi = require('strip-ansi'),
     path = require('path'),
@@ -35,14 +36,14 @@ process.stdin.on('readable', function() {
         _.each(mp3s, function(mp3) {
             var m = path.parse(mp3);
             tasks.push(function() {
-                var cmd = 'ffmpeg -loop 1 -r ntsc -i ' + program.image + ' -i ' + mp3 + ' -c:a copy -c:v libx264 -preset fast -threads 0 -shortest ' + m.name + '.mkv';
+                var cmd = 'ls ' + m.name + '.mkv 2>/dev/null || ffmpeg -loop 1 -r ntsc -i ' + program.image + ' -i ' + mp3 + ' -c:a copy -c:v libx264 -preset fast -threads 0 -shortest ' + m.name + '.mkv';
                 var start = new Date().getTime();
-                var out = child.execSync(cmd);
+                var out = trim(child.execSync(cmd).toString());
                 //                var out = 'some';
                 return {
                     cmd: cmd,
                     time: new Date().getTime() - start,
-                    out: out.split('\n'),
+                    out: out,
                 };
             });
         });
